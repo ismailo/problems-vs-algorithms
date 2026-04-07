@@ -1,42 +1,13 @@
 # Problem 2: Search in a Rotated Sorted Array
 
-## Reasoning
+## Design
 
-A straightforward linear scan would find the target in $O(n)$, but the problem requires $O(\log n)$. This rules out scanning and points directly to **binary search**.
+If the list is empty return `-1`. Set `low` and `high` to the start and end of the list. Take the midpoint and check if it matches the target — if so return the index. Then determine which half of the array is **fully sorted** by comparing the leftmost value to `mid`. If the left half is sorted and the target falls within its range, move `high` down into it; otherwise move `low` up into the right half. Apply the same logic in reverse if the right half is sorted instead. Repeat until found or the search space is empty.
 
-The challenge is that the array has been rotated, so a standard binary search — which assumes the entire array is sorted — would fail. The key observation is:
+## Big O Space Complexity
 
-> Even after a rotation, **at least one half of the array is always fully sorted**.
+Only pointer variables are used, no extra data structures: **O(1)**
 
-This is the invariant that makes the algorithm work. At each step, after computing `mid`, we check which half is sorted:
+## Big O Time Complexity
 
-- If `input_list[low] <= input_list[mid]`, the **left half** is sorted
-- Otherwise, the **right half** is sorted
-
-Once we know which half is sorted, we can determine in $O(1)$ whether the target falls inside that sorted half (a simple range check), and eliminate the other half entirely.
-
-```python
-if input_list[low] <= input_list[mid]:      # left half is sorted
-    if input_list[low] <= number < input_list[mid]:
-        high = mid - 1                       # target is in the left half
-    else:
-        low = mid + 1                        # target must be in the right half
-else:                                        # right half is sorted
-    if input_list[mid] < number <= input_list[high]:
-        low = mid + 1                        # target is in the right half
-    else:
-        high = mid - 1                       # target must be in the left half
-```
-
-This preserves the $O(\log n)$ property of binary search despite the rotation.
-
-## Why Not a Modified Linear Search?
-
-A linear scan would always work but at $O(n)$ cost. The structure of a rotated sorted array guarantees the "one sorted half" property at every level of the binary search, so we never need to abandon the logarithmic approach.
-
-## Complexity
-
-| | Complexity |
-|---|---|
-| **Time** | $O(\log n)$ — search space halves at every step |
-| **Space** | $O(1)$ — no additional data structures needed |
+Halves the search space on every iteration: **O(log n)** with `n` being the number of elements in the list.

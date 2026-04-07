@@ -1,42 +1,18 @@
 # Problem 6: Unsorted Integer Array
 
-## Reasoning
+## Design
 
-Finding the minimum and maximum of an unsorted list fundamentally requires examining every element at least once — you cannot skip any element without risking missing the true min or max. This means $O(n)$ is both the required and the theoretical lower bound for this problem.
+If the list is empty return `None`. Set both `current_min` and `current_max` to the **first element** as a starting point. Walk through the rest of the list one element at a time:
 
-The straightforward approach is a **single traversal** that maintains two running variables:
+- If the current element is **less than** `current_min`, update `current_min`
+- If it is **greater than** `current_max`, update `current_max`
 
-- `current_min` — the smallest value seen so far
-- `current_max` — the largest value seen so far
+Return the two values as a tuple when done.
 
-Both are initialized to `ints[0]` (the first element), then updated as we scan the rest of the list. This satisfies the bonus challenge of finding both values in a single pass.
+## Big O Space Complexity
 
-```python
-current_min = ints[0]
-current_max = ints[0]
+Two variables to hold min and max, no copy of the list is made: **O(1)**
 
-for num in ints[1:]:
-    if num < current_min:
-        current_min = num
-    if num > current_max:
-        current_max = num
-```
+## Big O Time Complexity
 
-## Why Not Sort First?
-
-Sorting would place the minimum at index 0 and the maximum at index -1, but any comparison-based sort costs at least $O(n \log n)$. Since we only need two values and not a fully ordered list, sorting is wasteful. The single-pass approach gives us what we need at $O(n)$.
-
-## Why Not Python's `min()` / `max()`?
-
-The problem explicitly prohibits built-in functions. Even if they were allowed, calling `min()` and `max()` separately would result in **two traversals** of the list. The single-pass approach is strictly more efficient in practice (half the iterations), even though both approaches are formally $O(n)$.
-
-## Edge Case
-
-An empty list has no meaningful min or max, so the function returns `None` — which is the correct and Pythonic way to signal "no result" without raising an exception.
-
-## Complexity
-
-| | Complexity |
-|---|---|
-| **Time** | $O(n)$ — exactly one pass through the list |
-| **Space** | $O(1)$ — only two tracking variables regardless of input size |
+Makes one pass through the list examining each element one time: **O(n)** with `n` being the number of elements in the list.

@@ -1,44 +1,14 @@
 
 # Problem 1: Square Root of an Integer
 
-## Reasoning
+## Design
 
-The naive approach would be to iterate from 0 up to `number` and find the largest integer whose square is ≤ `number`. This works but runs in $O(n)$ time, which is too slow for large inputs.
+If the number is `0` or `1`, return it immediately since the square root is itself. Otherwise, set `low` to `0` and `high` to the number. Take the midpoint and check if its square equals the number — if so return it. If the square is **less than** the number, store `mid` as a candidate floor value and move `low` up. If the square is **greater**, move `high` down. Repeat until the search space is exhausted and return the last stored candidate.
 
-Instead, I recognized that the sequence of integers $[0, 1, 2, \dots, n]$ is **sorted**, which makes it a perfect candidate for **binary search**. The idea is to search for the largest integer `mid` such that $mid^2 \leq number$.
+## Big O Space Complexity
 
-At every step we cut the search space in half:
+A fixed number of variables (`low`, `high`, `mid`, `result`) with no extra data structures: **O(1)**
 
-- If $mid^2 = number$ → exact square root found, return `mid`
-- If $mid^2 < number$ → `mid` is a valid floor candidate; record it and search the right half
-- If $mid^2 > number$ → search the left half
+## Big O Time Complexity
 
-The key insight is storing the last valid candidate in `result` before moving `low` upward. When the loop ends, `result` holds the **floor** of the square root.
-
-```python
-low, high = 0, number
-result = 0
-
-while low <= high:
-    mid = (low + high) // 2
-    if mid * mid == number:
-        return mid
-    elif mid * mid < number:
-        result = mid      # best floor candidate so far
-        low = mid + 1
-    else:
-        high = mid - 1
-
-return result
-```
-
-## Why Binary Search?
-
-The problem requires $O(\log n)$ time. Binary search is the canonical $O(\log n)$ technique for searching over a monotonically ordered domain — and the integers from 0 to `number` are exactly that.
-
-## Complexity
-
-| | Complexity |
-|---|---|
-| **Time** | $O(\log n)$ — search space halves each iteration |
-| **Space** | $O(1)$ — only a fixed number of variables used |
+Halves the search space on every iteration: **O(log n)** with `n` being the input number.
