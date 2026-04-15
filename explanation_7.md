@@ -10,7 +10,7 @@ Create a `RouteTrie` with a root node that holds the root handler. Each node sto
 
 An empty string `""` returns the not-found handler since it is not a valid path.
 
-## Big O Space Complexity
+## Big O Space Complexity!
 
 The trie stores one node per unique path segment across all routes: **O(R * d)** with `R` being the number of routes and `d` being the average number of segments per route.
 
